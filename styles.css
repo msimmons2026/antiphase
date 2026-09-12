@@ -236,3 +236,17 @@ dialog.done .sent{display:block}
   .step .n{padding-top:0}
   .page-hero .wrap{padding-top:112px}
 }
+
+/* ================= team ================= */
+.team-hero{min-height:clamp(340px,46vh,460px)}
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(26px,3.2vw,52px) clamp(24px,3vw,48px);margin-top:46px}
+.person{border-top:1px solid var(--line);padding-top:24px}
+.avatar{width:100%;aspect-ratio:4/5;background:linear-gradient(155deg,#17171b 0%,#0e0e11 58%,#09090b 100%);
+  border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.avatar span{font-family:var(--display);font-weight:200;font-size:clamp(22px,2.4vw,30px);letter-spacing:.22em;
+  text-indent:.22em;color:rgba(255,255,255,.30)}
+.person h3{margin:0;font-weight:400;font-size:17px;letter-spacing:-.005em}
+.person .role{margin:8px 0 0;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.person .bio{margin:16px 0 0;color:var(--mute);font-size:13.5px}
+@media(max-width:900px){.people{grid-template-columns:1fr 1fr;gap:30px 20px}}
+@media(max-width:560px){.people{grid-template-columns:1fr}}
