@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Antiphase Capital Management — Long/Short Equity & Global Macro</title>
+<meta name="description" content="Antiphase Capital Management is an alternative investment manager focused on long/short equity and global macro strategies." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#070708;
+  --panel:#0d0d0f;
+  --panel-2:#101013;
+  --fg:#f1f1ef;
+  --mute:#a0a0a4;
+  --dim:#6c6c71;
+  --line:rgba(255,255,255,.11);
+  --line-soft:rgba(255,255,255,.06);
+  --display:'Jost',"Futura","Century Gothic",system-ui,sans-serif;
+  --body:'Inter',-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --pad:clamp(20px,5vw,64px);
+  --maxw:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--ink);color:var(--fg);
+  font-family:var(--body);font-weight:300;font-size:15px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid rgba(255,255,255,.75);outline-offset:4px}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+
+/* ---------- wordmark ---------- */
+.mark{font-family:var(--display);font-weight:200;line-height:1}
+.mark .a{display:block;font-size:16px;letter-spacing:.42em;text-indent:.42em}
+.mark .b{display:block;font-size:7.5px;letter-spacing:.32em;text-indent:.32em;color:var(--mute);margin-top:5px}
+
+/* ---------- nav ---------- */
+header{position:fixed;inset:0 0 auto 0;z-index:60;transition:background .4s ease,backdrop-filter .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
+header.stuck{background:rgba(7,7,8,.86);backdrop-filter:blur(14px);border-bottom-color:var(--line-soft)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:74px}
+.nav ul{display:flex;gap:30px;list-style:none;margin:0;padding:0}
+.nav a.link{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);transition:color .25s}
+.nav a.link:hover{color:var(--fg)}
+.btn{
+  display:inline-block;border:1px solid var(--line);padding:11px 24px;
+  font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg);
+  background:transparent;cursor:pointer;font-family:var(--body);
+  transition:border-color .3s,background .3s;
+}
+.btn:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.04)}
+.burger{display:none;background:none;border:0;padding:8px;cursor:pointer}
+.burger span{display:block;width:22px;height:1px;background:var(--fg);margin:5px 0}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:#000}
+.hero-art{position:absolute;top:0;right:0;width:62%;height:100%;}
+.hero-art svg{width:100%;height:100%}
+.hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(7,7,8,.92) 22%,rgba(7,7,8,0) 60%)}
+.hero-inner{position:relative;z-index:2;width:100%}
+.kicker{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--mute)}
+.hero h1{margin:26px 0 0;font-family:var(--display);font-weight:200}
+.hero h1 .l1{display:block;font-size:clamp(34px,6.6vw,76px);letter-spacing:.19em;line-height:1.05}
+.hero h1 .l2{display:block;font-size:clamp(14px,2.3vw,26px);letter-spacing:.33em;color:#dcdcda;margin-top:12px}
+.rule{width:58px;height:1px;background:rgba(255,255,255,.4);margin:38px 0 22px}
+.strats{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#cfcfd2}
+.strats span{color:var(--dim);margin:0 14px}
+.scroll{position:absolute;left:var(--pad);bottom:56px;z-index:2;display:flex;align-items:center;gap:14px;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute)}
+.scroll i{display:block;width:1px;height:26px;background:linear-gradient(180deg,rgba(255,255,255,.5),transparent);animation:drop 2.6s ease-in-out infinite}
+@keyframes drop{0%,100%{transform:translateY(-6px);opacity:.3}50%{transform:translateY(4px);opacity:1}}
+
+/* ---------- section scaffolding ---------- */
+section{position:relative}
+.band{padding:clamp(76px,10vw,132px) 0}
+.eyebrow{display:flex;align-items:center;gap:16px;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute)}
+.eyebrow:after{content:"";flex:0 0 34px;height:1px;background:rgba(255,255,255,.3)}
+.head-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.num{font-size:10px;letter-spacing:.18em;color:var(--dim)}
+h2{font-family:var(--body);font-weight:300;margin:0;font-size:clamp(27px,4.2vw,44px);line-height:1.22;letter-spacing:-.012em}
+.two{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,7vw,96px);margin-top:44px;align-items:start}
+.copy{color:var(--mute);max-width:46ch;font-size:14.5px}
+.inline-link{display:inline-flex;align-items:center;gap:12px;margin-top:30px;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#d7d7d5}
+.inline-link .arw{width:26px;height:1px;background:currentColor;transition:width .3s ease}
+.inline-link:hover .arw{width:40px}
+
+/* ---------- wave ---------- */
+.wave{position:relative;padding:0 0 18px}
+.wave svg{width:100%;height:clamp(150px,20vw,260px)}
+.wave figcaption{position:absolute;right:var(--pad);bottom:22px;text-align:right;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);line-height:2}
+@media(prefers-reduced-motion:no-preference){
+  .dash{stroke-dasharray:2 9;animation:flow 26s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-440}}
+}
+
+/* ---------- strategies ---------- */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.card{position:relative;min-height:clamp(300px,34vw,420px);border:1px solid var(--line-soft);overflow:hidden;display:flex;align-items:flex-end;isolation:isolate}
+.card .art{position:absolute;inset:0;z-index:-1}
+.card .art svg{width:100%;height:100%}
+.card:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,7,8,.15) 35%,rgba(7,7,8,.9) 100%)}
+.card-body{padding:clamp(24px,3.2vw,40px);width:100%}
+.card h3{margin:0;font-family:var(--display);font-weight:300;font-size:clamp(17px,2.2vw,23px);letter-spacing:.2em;line-height:1.5}
+.card p{margin:16px 0 0;color:var(--mute);font-size:13.5px;max-width:34ch}
+.card .inline-link{margin-top:26px}
+
+/* ---------- globe ---------- */
+.lens{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;margin-top:34px}
+.globe{position:relative;display:flex;justify-content:center}
+.globe svg{width:min(100%,430px);height:auto}
+.regions{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;align-items:flex-end;text-align:right}
+.regions li{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+.lens-text h2{max-width:12ch}
+
+/* ---------- discipline ---------- */
+.discipline{position:relative;min-height:clamp(380px,46vw,520px);display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.discipline .art{position:absolute;inset:0}
+.discipline .art svg{width:100%;height:100%}
+.discipline .wrap{position:relative;z-index:2;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:32px}
+.discipline h2{max-width:11ch;margin-top:22px}
+.pillars{list-style:none;margin:0;padding:0;text-align:right;display:flex;flex-direction:column;gap:13px}
+.pillars li{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- access ---------- */
+.access{padding:clamp(58px,7vw,88px) 0;border-bottom:1px solid var(--line-soft)}
+.access .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,80px);align-items:center}
+.access h2{font-size:clamp(23px,3vw,32px);margin-top:20px}
+.access .right{border-left:1px solid var(--line-soft);padding-left:clamp(24px,4vw,56px)}
+.access p{margin:0 0 26px;color:var(--mute);max-width:40ch;font-size:14px}
+
+/* ---------- footer ---------- */
+footer{padding:clamp(48px,6vw,72px) 0 34px}
+.f-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:40px}
+.f-grid ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.f-grid a{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.f-grid a:hover{color:var(--fg)}
+.f-right{border-left:1px solid var(--line-soft);padding-left:clamp(24px,4vw,56px)}
+.f-tag{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--mute);line-height:2.1}
+.social{display:flex;gap:18px;margin-top:26px}
+.social a{width:18px;height:18px;color:var(--mute);transition:color .25s}
+.social a:hover{color:var(--fg)}
+.f-base{display:flex;justify-content:space-between;gap:20px;margin-top:clamp(40px,6vw,70px);padding-top:22px;border-top:1px solid var(--line-soft);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.f-base nav{display:flex;gap:26px}
+
+/* ---------- dialog ---------- */
+dialog{border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:0;width:min(520px,92vw);max-width:none}
+dialog::backdrop{background:rgba(3,3,4,.82);backdrop-filter:blur(4px)}
+.d-in{padding:clamp(26px,4vw,40px)}
+dialog h3{margin:18px 0 6px;font-weight:300;font-size:22px}
+dialog p.sub{margin:0 0 26px;color:var(--mute);font-size:13.5px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.field input,.field select{
+  width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);
+  color:var(--fg);font-family:var(--body);font-size:14px;font-weight:300;padding:9px 0;
+}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 9px) 18px,calc(100% - 4px) 18px;background-size:5px 5px;background-repeat:no-repeat}
+.field select option{background:var(--panel)}
+.field input:focus,.field select:focus{outline:none;border-bottom-color:rgba(255,255,255,.6)}
+.d-actions{display:flex;gap:14px;align-items:center;margin-top:28px}
+.d-note{font-size:11px;color:var(--dim);line-height:1.6;margin-top:22px}
+.d-close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--mute);font-size:20px;line-height:1;cursor:pointer}
+.sent{display:none;text-align:left}
+dialog.done .form-part{display:none}
+dialog.done .sent{display:block}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(14px);transition:opacity 1s ease,transform 1s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.scroll i{animation:none}}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .nav ul,.nav .btn{display:none}
+  .burger{display:block}
+  header.open .nav ul{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;gap:0;background:rgba(7,7,8,.97);border-top:1px solid var(--line-soft);padding:8px 0}
+  header.open .nav ul li a{display:block;padding:15px var(--pad)}
+  .hero-art{width:100%;opacity:.5}
+  .hero-art:after{background:linear-gradient(180deg,rgba(7,7,8,.75),rgba(7,7,8,.45) 50%,var(--ink))}
+  .two,.cards,.lens,.access .grid,.f-grid{grid-template-columns:1fr}
+  .lens{gap:36px}
+  .globe{order:-1}
+  .regions{align-items:flex-start;text-align:left;flex-flow:row wrap;gap:10px 20px}
+  .discipline .wrap{flex-direction:column;align-items:flex-start}
+  .pillars{text-align:left;flex-flow:row wrap;gap:10px 20px}
+  .access .right,.f-right{border-left:0;padding-left:0;border-top:1px solid var(--line-soft);padding-top:28px}
+  .f-base{flex-direction:column;gap:14px}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#top" class="mark" aria-label="Antiphase Capital Management, home">
+      <span class="a">ANTIPHASE</span><span class="b">CAPITAL MANAGEMENT</span>
+    </a>
+    <ul>
+      <li><a class="link" href="#purpose">Approach</a></li>
+      <li><a class="link" href="#strategies">Strategies</a></li>
+      <li><a class="link" href="#philosophy">Team</a></li>
+      <li><a class="link" href="#lens">Insights</a></li>
+      <li><a class="link" href="#access">Investor access</a></li>
+    </ul>
+    <button class="btn" data-open>Contact</button>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="kicker">Out of phase with consensus.</p>
+      <h1>
+        <span class="l1">ANTIPHASE</span>
+        <span class="l2">CAPITAL MANAGEMENT</span>
+      </h1>
+      <div class="rule"></div>
+      <p class="strats">Long/Short Equity <span>|</span> Global Macro</p>
+    </div>
+    <a href="#purpose" class="scroll"><i></i>Scroll</a>
+  </section>
+
+  <!-- 01 PURPOSE -->
+  <section class="band" id="purpose">
+    <div class="wrap">
+      <div class="head-row rv">
+        <p class="eyebrow">Our purpose</p>
+        <span class="num">01</span>
+      </div>
+      <div class="two">
+        <h2 class="rv">Independent thinking across global markets.</h2>
+        <div class="rv">
+          <p class="copy">Antiphase Capital Management is an alternative investment manager focused on long/short equity and global macro strategies. We seek opportunities where market prices, fundamentals, positioning and consensus expectations move out of alignment.</p>
+          <a class="inline-link" href="#philosophy">Discover our approach <span class="arw"></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAVE -->
+  <figure class="wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 300" preserveAspectRatio="none">
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="fade" x1="0" x2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0"/>
+          <stop offset="26%" stop-color="#fff" stop-opacity=".55"/>
+          <stop offset="62%" stop-color="#fff" stop-opacity=".8"/>
+          <stop offset="100%" stop-color="#fff" stop-opacity=".1"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="700" cy="150" rx="360" ry="90" fill="url(#glow)"/>
+      <path d="M0 172 C 180 172 250 74 430 74 S 680 214 860 214 S 1110 96 1290 96 1440 150 1440 150"
+            fill="none" stroke="url(#fade)" stroke-width="1"/>
+      <path class="dash" d="M0 150 C 190 150 260 206 440 206 S 690 62 870 62 S 1120 190 1300 190 1440 140 1440 140"
+            fill="none" stroke="#ffffff" stroke-opacity=".42" stroke-width="1"/>
+    </svg>
+    <figcaption>Different perspective.<br/>Disciplined execution.</figcaption>
+  </figure>
+
+  <!-- 02 STRATEGIES -->
+  <section class="band" id="strategies" style="padding-top:clamp(46px,6vw,80px)">
+    <div class="wrap">
+      <div class="head-row rv">
+        <p class="eyebrow">Our strategies</p>
+        <span class="num">02</span>
+      </div>
+      <div class="cards">
+        <article class="card rv">
+          <div class="art" id="cityArt" aria-hidden="true"></div>
+          <div class="card-body">
+            <h3>LONG/SHORT<br>EQUITY</h3>
+            <p>Bottom-up research. Fundamental dislocation. Asymmetric opportunity.</p>
+            <a class="inline-link" href="#philosophy">Learn more <span class="arw"></span></a>
+          </div>
+        </article>
+        <article class="card rv">
+          <div class="art" id="earthArt" aria-hidden="true"></div>
+          <div class="card-body">
+            <h3>GLOBAL<br>MACRO</h3>
+            <p>A global perspective. Event-driven. Regime-aware.</p>
+            <a class="inline-link" href="#lens">Learn more <span class="arw"></span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 GLOBAL LENS -->
+  <section class="band" id="lens" style="padding-top:clamp(30px,4vw,56px)">
+    <div class="wrap">
+      <div class="head-row rv">
+        <p class="eyebrow">A global lens</p>
+        <span class="num">03</span>
+      </div>
+      <div class="lens">
+        <div class="lens-text rv">
+          <h2>Markets are connected. So is our thinking.</h2>
+          <a class="inline-link" href="#philosophy">Our perspective <span class="arw"></span></a>
+        </div>
+        <div class="globe rv" id="globeArt" aria-hidden="true"></div>
+      </div>
+      <ul class="regions rv" style="margin-top:18px">
+        <li>North America</li><li>South America</li><li>Europe</li>
+        <li>Asia</li><li>Middle East</li><li>Global markets</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 PHILOSOPHY -->
+  <section class="band" id="philosophy">
+    <div class="wrap">
+      <div class="head-row rv">
+        <p class="eyebrow">Our philosophy</p>
+        <span class="num">04</span>
+      </div>
+      <div class="two">
+        <h2 class="rv">Not contrarian by default. Independent by design.</h2>
+        <p class="copy rv">Markets are efficient enough to punish complacency, but inefficient enough to reward independent thought. We seek asymmetric opportunities where our assessment of risk and reward differs materially from consensus.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCIPLINE -->
+  <section class="discipline">
+    <div class="art" id="concreteArt" aria-hidden="true"></div>
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Discipline</p>
+        <h2>Built for what comes next.</h2>
+      </div>
+      <ul class="pillars">
+        <li>Research</li><li>Risk management</li>
+        <li>Capital preservation</li><li>Long-term perspective</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section class="access" id="access">
+    <div class="wrap grid">
+      <div>
+        <p class="eyebrow">Investor access</p>
+        <h2>For qualified investors.</h2>
+      </div>
+      <div class="right">
+        <p>Learn more about our investment strategies, process and access opportunities.</p>
+        <button class="btn" data-open>Request information</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <a href="#top" class="mark"><span class="a">ANTIPHASE</span><span class="b">CAPITAL MANAGEMENT</span></a>
+      <ul>
+        <li><a href="#purpose">Approach</a></li>
+        <li><a href="#strategies">Strategies</a></li>
+        <li><a href="#philosophy">Team</a></li>
+        <li><a href="#lens">Insights</a></li>
+        <li><a href="#access">Investor access</a></li>
+        <li><a href="#" data-open>Contact</a></li>
+      </ul>
+      <div class="f-right">
+        <p class="f-tag">Out of phase<br>with consensus.</p>
+        <div class="social">
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0 0-5zM3 9.5h4V21H3zM9 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.2c0-1.24-.02-2.84-1.9-2.84-1.9 0-2.2 1.36-2.2 2.75V21H9z"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 3h3.3l-7.2 8.2L21.8 21h-6.4l-4.6-5.9L5.5 21H2.2l7.7-8.8L2.4 3h6.6l4.1 5.4zm-1.2 16h1.8L7.9 4.8H6z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="f-base">
+      <p>© 2026 Antiphase Capital Management. All rights reserved.</p>
+      <nav><a href="#">Privacy</a><a href="#">Disclaimers</a></nav>
+    </div>
+  </div>
+</footer>
+
+<dialog id="dlg">
+  <button class="d-close" data-close aria-label="Close">×</button>
+  <div class="d-in">
+    <div class="form-part">
+      <p class="eyebrow">Investor access</p>
+      <h3>Request information</h3>
+      <p class="sub">Tell us a little about you and we'll follow up with strategy materials.</p>
+      <form id="frm" novalidate>
+        <div class="field"><label for="n">Name</label><input id="n" name="name" required autocomplete="name"></div>
+        <div class="field"><label for="e">Email</label><input id="e" name="email" type="email" required autocomplete="email"></div>
+        <div class="field"><label for="o">Firm</label><input id="o" name="firm" autocomplete="organization"></div>
+        <div class="field">
+          <label for="t">Investor type</label>
+          <select id="t" name="type">
+            <option>Qualified purchaser</option>
+            <option>Accredited investor</option>
+            <option>Institution</option>
+            <option>Consultant / allocator</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="d-actions"><button class="btn" type="submit">Send request</button><span id="err" style="font-size:11px;color:#c88" role="alert"></span></div>
+        <p class="d-note">Interests in the funds are offered only to qualified investors through definitive offering documents. Nothing on this site is an offer to sell or a solicitation to buy any security.</p>
+      </form>
+    </div>
+    <div class="sent">
+      <p class="eyebrow">Request sent</p>
+      <h3>Thank you.</h3>
+      <p class="sub">A member of the investor relations team will be in touch shortly.</p>
+      <button class="btn" data-close>Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+  'use strict';
+  const NS='http://www.w3.org/2000/svg';
+  const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const lerp=(a,b,t)=>({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t});
+
+  /* ---- tower generator: a facade seen from street level, mullions converging on the apex ---- */
+  function tower(svg,o){
+    const A=o.apex, L=o.left, C=o.corner, R=o.right, g=el('g',{});
+    const face=(p1,p2,p3,fill)=>el('polygon',{points:`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`,fill:fill});
+    g.appendChild(face(A,L,C,o.fillL));
+    g.appendChild(face(A,C,R,o.fillR));
+    const lines=(E1,E2,n,op)=>{
+      for(let i=1;i<n;i++){
+        const t=i/n;
+        const p1=lerp(A,E1,1), p2=lerp(A,E2,1);
+        const b=lerp(p1,p2,t);
+        g.appendChild(el('line',{x1:A.x,y1:A.y,x2:b.x,y2:b.y,stroke:'#fff','stroke-opacity':op,'stroke-width':.6}));
+      }
+      for(let i=1;i<=o.floors;i++){
+        const t=Math.pow(i/o.floors,1.85);
+        const a=lerp(A,E1,t), b=lerp(A,E2,t);
+        g.appendChild(el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#fff','stroke-opacity':op*0.55,'stroke-width':.6}));
+      }
+    };
+    lines(L,C,o.bays,o.opL);
+    lines(C,R,Math.round(o.bays*0.7),o.opR);
+    g.appendChild(el('line',{x1:A.x,y1:A.y,x2:C.x,y2:C.y,stroke:'#fff','stroke-opacity':.5,'stroke-width':1}));
+    svg.appendChild(g);
+    return g;
+  }
+
+  /* ---- hero ---- */
+  const heroHost=document.getElementById('heroArt');
+  if(heroHost){
+    const s=el('svg',{viewBox:'0 0 900 900',preserveAspectRatio:'xMidYMid slice'});
+    const defs=el('defs',{});
+    defs.innerHTML=`
+      <linearGradient id="fl" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#0b0b0d"/><stop offset="100%" stop-color="#26262b"/>
+      </linearGradient>
+      <linearGradient id="fr" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#3a3a41"/><stop offset="100%" stop-color="#0c0c0f"/>
+      </linearGradient>
+      <radialGradient id="sky" cx="62%" cy="4%" r="52%">
+        <stop offset="0%" stop-color="#8e8e96" stop-opacity=".85"/>
+        <stop offset="55%" stop-color="#1b1b20" stop-opacity=".5"/>
+        <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>`;
+    s.appendChild(defs);
+    s.appendChild(el('rect',{x:0,y:0,width:900,height:900,fill:'#000'}));
+    s.appendChild(el('rect',{x:0,y:0,width:900,height:900,fill:'url(#sky)'}));
+    tower(s,{apex:{x:560,y:38},left:{x:120,y:940},corner:{x:470,y:940},right:{x:980,y:940},
+             fillL:'url(#fl)',fillR:'url(#fr)',bays:9,floors:26,opL:.10,opR:.16});
+    heroHost.appendChild(s);
+  }
+
+  /* ---- strategy card: cluster seen from below ---- */
+  const cityHost=document.getElementById('cityArt');
+  if(cityHost){
+    const s=el('svg',{viewBox:'0 0 600 460',preserveAspectRatio:'xMidYMid slice'});
+    const defs=el('defs',{});
+    defs.innerHTML=`
+      <linearGradient id="cl" x1="0" x2="1"><stop offset="0%" stop-color="#0a0a0c"/><stop offset="100%" stop-color="#1e1e23"/></linearGradient>
+      <linearGradient id="cr" x1="0" x2="1"><stop offset="0%" stop-color="#2e2e35"/><stop offset="100%" stop-color="#0a0a0c"/></linearGradient>
+      <radialGradient id="csky" cx="40%" cy="6%" r="60%">
+        <stop offset="0%" stop-color="#9a9aa2" stop-opacity=".55"/><stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>`;
+    s.appendChild(defs);
+    s.appendChild(el('rect',{x:0,y:0,width:600,height:460,fill:'#08080a'}));
+    s.appendChild(el('rect',{x:0,y:0,width:600,height:460,fill:'url(#csky)'}));
+    tower(s,{apex:{x:150,y:120},left:{x:-90,y:520},corner:{x:110,y:520},right:{x:300,y:520},
+             fillL:'url(#cl)',fillR:'url(#cr)',bays:5,floors:16,opL:.08,opR:.13});
+    tower(s,{apex:{x:430,y:60},left:{x:300,y:520},corner:{x:470,y:520},right:{x:680,y:520},
+             fillL:'url(#cl)',fillR:'url(#cr)',bays:6,floors:20,opL:.09,opR:.15});
+    cityHost.appendChild(s);
+  }
+
+  /* ---- earth: night side with city light stipple ---- */
+  function earth(host,opt){
+    const size=opt.size, cx=size/2, cy=opt.cy||size/2, r=opt.r;
+    const s=el('svg',{viewBox:`0 0 ${size} ${size}`,preserveAspectRatio:'xMidYMid slice'});
+    const defs=el('defs',{});
+    defs.innerHTML=`
+      <radialGradient id="g${opt.id}" cx="34%" cy="34%" r="72%">
+        <stop offset="0%" stop-color="#31313a"/><stop offset="62%" stop-color="#131317"/><stop offset="100%" stop-color="#050506"/>
+      </radialGradient>
+      <radialGradient id="atm${opt.id}" cx="50%" cy="50%" r="50%">
+        <stop offset="86%" stop-color="#fff" stop-opacity="0"/>
+        <stop offset="97%" stop-color="#cfd6e6" stop-opacity=".30"/>
+        <stop offset="100%" stop-color="#cfd6e6" stop-opacity="0"/>
+      </radialGradient>
+      <clipPath id="cp${opt.id}"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>`;
+    s.appendChild(defs);
+    if(opt.bg) s.appendChild(el('rect',{x:0,y:0,width:size,height:size,fill:opt.bg}));
+    s.appendChild(el('circle',{cx:cx,cy:cy,r:r,fill:`url(#g${opt.id})`}));
+    const clip=el('g',{'clip-path':`url(#cp${opt.id})`});
+    // landmass-ish light clusters: seeded pseudo-random stipple around a few centres
+    let seed=opt.id*7919+13;
+    const rnd=()=>{seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};
+    const centres=[[-.30,-.28,.34],[-.12,.10,.30],[.16,-.34,.26],[.34,.02,.30],[.10,.40,.24],[.46,-.22,.20]];
+    centres.forEach(c=>{
+      const n=opt.dots;
+      for(let i=0;i<n;i++){
+        const a=rnd()*Math.PI*2, d=Math.pow(rnd(),.6)*c[2]*r;
+        const x=cx+c[0]*r+Math.cos(a)*d, y=cy+c[1]*r+Math.sin(a)*d*0.72;
+        const dist=Math.hypot(x-cx,y-cy)/r;
+        if(dist>0.97) continue;
+        const shade=1-dist*0.55;
+        clip.appendChild(el('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:(rnd()*0.9+0.35).toFixed(2),
+          fill:'#f4f0e6','fill-opacity':(rnd()*0.5+0.18)*shade}));
+      }
+    });
+    // network arcs
+    if(opt.arcs){
+      clip.appendChild(el('path',{d:`M ${cx-r*0.9} ${cy+r*0.16} Q ${cx} ${cy-r*0.42} ${cx+r*0.9} ${cy+r*0.10}`,fill:'none',stroke:'#fff','stroke-opacity':.20,'stroke-width':.8}));
+      clip.appendChild(el('path',{d:`M ${cx-r*0.72} ${cy-r*0.34} Q ${cx+r*0.1} ${cy+r*0.30} ${cx+r*0.86} ${cy-r*0.30}`,fill:'none',stroke:'#fff','stroke-opacity':.14,'stroke-width':.8}));
+    }
+    // terminator shadow
+    const sh=el('ellipse',{cx:cx+r*0.55,cy:cy+r*0.30,rx:r*1.05,ry:r*1.05,fill:'#000','fill-opacity':.45});
+    sh.setAttribute('filter',`url(#bl${opt.id})`);
+    const f=el('filter',{id:`bl${opt.id}`,x:'-30%',y:'-30%',width:'160%',height:'160%'});
+    f.appendChild(el('feGaussianBlur',{stdDeviation:r*0.18}));
+    defs.appendChild(f);
+    clip.appendChild(sh);
+    s.appendChild(clip);
+    s.appendChild(el('circle',{cx:cx,cy:cy,r:r,fill:`url(#atm${opt.id})`}));
+    host.appendChild(s);
+  }
+  const earthHost=document.getElementById('earthArt');
+  if(earthHost) earth(earthHost,{id:1,size:600,cy:300,r:330,dots:150,bg:'#08080a',arcs:false});
+  const globeHost=document.getElementById('globeArt');
+  if(globeHost){
+    const s=document.createElement('div');
+    globeHost.appendChild(s);
+    earth(s,{id:2,size:440,r:196,dots:200,arcs:true});
+    s.firstChild.setAttribute('preserveAspectRatio','xMidYMid meet');
+    s.firstChild.style.width='min(100%,430px)';
+  }
+
+  /* ---- concrete: raking light across folded planes ---- */
+  const conHost=document.getElementById('concreteArt');
+  if(conHost){
+    const s=el('svg',{viewBox:'0 0 1440 560',preserveAspectRatio:'none'});
+    const defs=el('defs',{});
+    defs.innerHTML=`
+      <linearGradient id="p1" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0%" stop-color="#111114"/><stop offset="100%" stop-color="#34343a"/></linearGradient>
+      <linearGradient id="p2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2a2a30"/><stop offset="100%" stop-color="#0a0a0c"/></linearGradient>
+      <linearGradient id="p3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1a1f"/><stop offset="100%" stop-color="#08080a"/></linearGradient>
+      <linearGradient id="veil" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#070708" stop-opacity=".96"/><stop offset="52%" stop-color="#070708" stop-opacity=".55"/><stop offset="100%" stop-color="#070708" stop-opacity=".8"/></linearGradient>`;
+    s.appendChild(defs);
+    s.appendChild(el('rect',{x:0,y:0,width:1440,height:560,fill:'#0a0a0c'}));
+    s.appendChild(el('polygon',{points:'0,0 900,150 900,470 0,560',fill:'url(#p1)'}));
+    s.appendChild(el('polygon',{points:'900,150 1440,60 1440,520 900,470',fill:'url(#p2)'}));
+    s.appendChild(el('polygon',{points:'0,530 900,455 1440,510 1440,560 0,560',fill:'url(#p3)'}));
+    for(let i=1;i<7;i++){
+      const y=i*78;
+      s.appendChild(el('line',{x1:0,y1:y,x2:900,y2:y*0.56+150*(1-i/12),stroke:'#fff','stroke-opacity':.05,'stroke-width':1}));
+    }
+    for(let i=1;i<5;i++){
+      const x=i*190;
+      s.appendChild(el('line',{x1:x,y1:x*0.166,x2:x,y2:560-x*0.1,stroke:'#fff','stroke-opacity':.045,'stroke-width':1}));
+    }
+    s.appendChild(el('rect',{x:0,y:0,width:1440,height:560,fill:'url(#veil)'}));
+    conHost.appendChild(s);
+  }
+
+  /* ---- nav state ---- */
+  const hdr=document.getElementById('hdr');
+  const onScroll=()=>hdr.classList.toggle('stuck',window.scrollY>60);
+  onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
+  const burger=document.getElementById('burger');
+  burger.addEventListener('click',()=>{
+    const open=hdr.classList.toggle('open');
+    burger.setAttribute('aria-expanded',String(open));
+  });
+  hdr.querySelectorAll('.nav ul a').forEach(a=>a.addEventListener('click',()=>{
+    hdr.classList.remove('open');burger.setAttribute('aria-expanded','false');
+  }));
+
+  /* ---- reveal ---- */
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.18});
+  document.querySelectorAll('.rv').forEach((n,i)=>{n.style.transitionDelay=(i%3)*90+'ms';io.observe(n);});
+
+  /* ---- dialog ---- */
+  const dlg=document.getElementById('dlg');
+  document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',e=>{
+    e.preventDefault();dlg.classList.remove('done');dlg.showModal();
+  }));
+  dlg.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>dlg.close()));
+  document.getElementById('frm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const f=e.target, err=document.getElementById('err');
+    const email=f.email.value.trim();
+    if(!f.name.value.trim()){err.textContent='Enter your name.';return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){err.textContent='Enter a valid email address.';return;}
+    err.textContent='';
+    /* wire this to your CRM / form endpoint */
+    dlg.classList.add('done');
+    f.reset();
+  });
+})();
+</script>
+</body>
+</html>
