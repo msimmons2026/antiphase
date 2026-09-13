@@ -258,5 +258,10 @@ dialog.done .sent{display:block}
 @media(max-width:1080px){.related{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){.related{grid-template-columns:1fr}.card.wide{grid-column:auto}}
 
-/* hero strategy line breaks after the third item */
-.strats .brk{flex-basis:100%;height:0;margin:0}
+/* hero strategy line: two rows on desktop, one flowing list on small screens */
+.sep-m{display:none}
+@media(max-width:760px){
+  .strat-lines{display:flex;flex-wrap:wrap;align-items:center;row-gap:9px}
+  .strat-lines .strats{display:contents}
+  .sep-m{display:inline;color:var(--dim);margin:0 clamp(9px,2.4vw,15px)}
+}
