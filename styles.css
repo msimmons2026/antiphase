@@ -216,7 +216,7 @@ dialog.done .sent{display:block}
 .step h3{margin:0;font-weight:400;font-size:17px}
 .step p{margin:0;color:var(--mute);font-size:13.5px;max-width:52ch}
 
-.related{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.related{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
 .rel{border:1px solid var(--line-soft);padding:clamp(22px,2.6vw,30px);transition:border-color .3s,background .3s;display:block}
 .rel:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.02)}
 .rel .n{font-size:9.5px;letter-spacing:.2em;color:var(--dim)}
@@ -250,3 +250,10 @@ dialog.done .sent{display:block}
 .person .bio{margin:16px 0 0;color:var(--mute);font-size:13.5px}
 @media(max-width:900px){.people{grid-template-columns:1fr 1fr;gap:30px 20px}}
 @media(max-width:560px){.people{grid-template-columns:1fr}}
+
+/* fifth strategy card runs full width */
+.card.wide{grid-column:1 / -1;min-height:clamp(260px,26vw,340px)}
+.card.wide .card-body{max-width:780px}
+.card.wide h3{letter-spacing:.22em}
+@media(max-width:1080px){.related{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.related{grid-template-columns:1fr}.card.wide{grid-column:auto}}
